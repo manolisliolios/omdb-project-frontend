@@ -1,11 +1,27 @@
 <template>
 
   <div id="movie">
-    <b-button variant="primary" @click="$router.push('/')">Go Back</b-button>
+    <div class="container">
+      <b-button variant="primary" @click="$router.push('/')">Go Back</b-button>
 
-    <div>
-      {{movie}}
+      <div class="row align-items-center justify-content-center">
+
+        <div class="col-12 col-md-3 mt-4">
+          <img :src="movie.Poster"/>
+        </div>
+        <div class="col-12 col-md-9 mt-4 text-left">
+
+          <h2>{{movie.Title}}</h2>
+          <p>{{movie.Plot}}</p>
+
+          <p><strong>Duration:</strong> {{movie.Runtime}}</p>
+          <p><strong>Actors:</strong> {{movie.Actors}}</p>
+          <p><strong>Writer:</strong> {{movie.Writer}}</p>
+          <p><strong>Director:</strong> {{movie.Director}}</p>
+        </div>
+      </div>
     </div>
+
   </div>
 </template>
 

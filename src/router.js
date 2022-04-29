@@ -5,6 +5,7 @@ import About from "./views/About";
 import Movie from "./views/Movie";
 import Login from "./views/Login";
 import Account from "./views/Account";
+import Register from "./views/Register";
 
 Vue.use(VueRouter);
 
@@ -13,6 +14,9 @@ const routes = [
     {path: '/movies/:movieId', name: 'movie', component: Movie},
     {path:'/about', name: 'about', component: About},
     {path: '/login', name: 'login', component: Login,
+        meta:{ authPage: true }
+    },
+    {path: '/register', name: 'register', component: Register,
         meta:{ authPage: true }
     },
     {path: '/account', name: 'account', component: Account,
@@ -42,6 +46,6 @@ router.beforeEach((to, from, next) => {
     }
 
     next();
-})
+});
 
 export default router;

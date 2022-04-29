@@ -7,8 +7,14 @@
 
         <div class="col-12">
           <h5 v-if="isLoggedIn">Hey {{user.name}}</h5>
-          <h2>Find your next <span class="text-switcher"> {{phrases[currIndex]}}</span></h2>
-          <SearchBar/>
+
+          <div class="search-container">
+
+            <h2>Find your next <span class="text-switcher"> {{phrases[currIndex]}}</span></h2>
+            <SearchBar/>
+            <img src="@/assets/images/cinema.svg" width="300" class="my-4"/>
+          </div>
+
         </div>
       </div>
     </div>

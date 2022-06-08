@@ -7,6 +7,7 @@ import Login from "./views/Login";
 import Account from "./views/Account";
 import Register from "./views/Register";
 import Bookmarks from "./views/Bookmarks";
+import calculator from "./views/calculator";
 Vue.use(VueRouter);
 
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
     {path: '/bookmarks', name: 'bookmarks', component: Bookmarks,
         meta: { requiresAuth: true }
     },
+    {path: '/apple-calculator', name: 'apple-calculator', component:calculator }
 
 
 ];

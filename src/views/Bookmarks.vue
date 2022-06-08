@@ -2,23 +2,19 @@
   <div id="account">
 
     <h2>Your bookmarks, <span class="text-primary-gradient">{{user.fullName}}</span></h2>
-    <div v-if="userObj" class="account-page">
+    <div class="account-page">
 
       <div class="container">
 
         <div class="row">
-          <div class="col-12 col-md-6 text-left">
-
-            <b-card>
-              <b-card-title><h6>Your profile details</h6></b-card-title>
-              <b-card-body>
-                <b-form-input v-model="userObj.fullName" class="mb-2" disabled/>
-
-                <b-form-input v-model="userObj.email" disabled/>
-              </b-card-body>
-            </b-card>
-
-
+          <div v-for="bookmark of bookmarkData" class="col-12 col-md-6 text-left" :key="bookmark.imdbID">
+            <search-result :item="bookmark" :is-logged-in="true" :bookmarks="bookmarks"/>
+          </div>
+          <div v-if="bookmarks.length === 0" class="col-12 text-center mt-5">
+            <p>
+              You haven't saved any bookmarks yet.
+            </p>
+            <b-button variant="primary" @click="$router.push({name:'home'})">Start browsing movies and series</b-button>
           </div>
         </div>
 
@@ -29,32 +25,40 @@
 </template>
 
 <script>
+import SearchResult from "../components/SearchResult";
 import {mapState} from "vuex"
 export default{
 
-
+  components:{SearchResult},
   computed:{
     ...mapState({
-      user: state => state.user
+      user: state => state.user,
+      bookmarks: state => state.bookmarks
     })
   },
+  watch:{
+    bookmarks(){
+      console.log('changed');
+      this.fetchBookmarkMovies();
+    }
+  },
   methods:{
-    fetchBookmarks(){
-      this.axios.get('/bookmarks').then(res => {
-console.log(res);
-      }).catch(e=>{
-        console.log(e);
-      })
+    fetchBookmarkMovies(){
+      this.bookmarkData = [];
+      for(let bookmark of this.bookmarks){
+        this.axios.get('/movies/'+bookmark, {params: {plot:'short'}}).then(res=>{
+          this.bookmarkData.push(res.data);
+        })
+      }
     }
   },
   data(){
     return{
-      bookmarks: null
+      bookmarkData: []
     }
   },
   mounted(){
-
-    this.fetchBookmarks();
+    this.fetchBookmarkMovies();
   }
 }
 </script>

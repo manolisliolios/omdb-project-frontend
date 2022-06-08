@@ -26,4 +26,7 @@ new Vue({
   render: h => h(App),
   store: store,
   router: router,
+  created(){
+    store.dispatch('init');
+  }
 }).$mount('#app')

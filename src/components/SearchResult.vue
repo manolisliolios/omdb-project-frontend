@@ -1,10 +1,17 @@
 <template>
 
   <div v-if="item">
-    <div class="search-result-item" @click="redirectToMovie(item.imdbID)" :style="`background-image:url('${item.Poster}')`">
+    <div class="search-result-item" :style="`background-image:url('${item.Poster}')`">
       <div class="__overlay"></div>
       <div class="__content">
 
+        <div class="__bookmark">
+          <b-button variant="link" :title="buttonTitle(item.imdbID)" v-b-tooltip.hover
+                    @click="bookmarks.includes(item.imdbID) ? removeBookmark(item.imdbID) : addBookmark(item.imdbID)">
+            <img :src="bookmarks.includes(item.imdbID) ? bookmarkFilled : bookmark"/>
+          </b-button>
+
+        </div>
           <h2 class="text-white">
             {{item.Title}}
           </h2>
@@ -13,6 +20,10 @@
           <p class="desc">
             {{item.Plot}}
           </p>
+
+        <b-button variant="outline-white" class="movie-card__button"  @click="redirectToMovie(item.imdbID)">
+          View Details
+        </b-button>
 
 
 
@@ -27,14 +38,14 @@
 
 <style lang="scss">
 .search-result-item{
-  cursor:pointer;
+
   background-size: 60%;
   background-repeat: no-repeat;
   background-position:bottom left;
   width:100%;
   max-width: 800px;
   height: 100%;
-  min-height: 250px;
+  min-height: 300px;
   display: block;
   margin: 1rem auto;
   border-radius: 15px;
@@ -52,6 +63,18 @@
   padding:.5em 1em;
   text-align:left;
   font-weight:bold;
+  .__bookmark{
+    cursor:pointer;
+    width:14px;
+    position:absolute;
+    top:10px;
+    right:5px;
+    button{
+      width:14px;
+      padding:0;
+      margin:0;
+    }
+  }
   .__overlay {
     width:100%;
     border-radius: 15px;
@@ -75,7 +98,7 @@
     flex-direction: column;
     position:relative;
     float: right;
-    padding-right: 1.2em;
+    padding-right: 3rem;
     padding-bottom: 1em;
     @media screen and (max-width: 1000px) {
       width: 50%;
@@ -100,26 +123,53 @@
 
 <script>
 
+import bookmark from "@/assets/images/bookmark.svg";
+import bookmarkFilled from "@/assets/images/bookmark-filled.svg";
 export default{
 
   props:{
-    item: Object
+    item: Object,
+    bookmarks: Array,
+    isLoggedIn: Boolean
+  },
+  data(){
+    return{
+      bookmark: bookmark,
+      bookmarkFilled: bookmarkFilled
+    }
   },
   methods:{
+    buttonTitle(id){
+      if(!this.isLoggedIn) return 'You need to login to use this feature!';
+
+      if(this.bookmarks.includes(id)) return 'Remove from bookmarks'
+      return 'Add to bookmarks';
+    },
     redirectToMovie(id){
       this.$router.push({name: 'movie', params: {movieId: id}});
     },
 
     addBookmark(id){
+      if(!this.isLoggedIn) return;
       this.axios.post('/bookmarks', {
         movieId: id
       }).then(res=>{
-
+        this.$notify({type: 'success', title:'Bookmark added successfully', text: 'Movie was saved successfully to your bookmarks.', position: 'bottom center'});
+        this.$store.dispatch('addBookmark', id);
         console.log(res.data);
       }).catch(()=>{
         this.$notify({type: 'error', title:'Something went wrong', text: 'Failed to add the bookmark. Please try again later.', position: 'bottom center'});
       })
-    }
+    },
+    removeBookmark(id){
+      if(!this.isLoggedIn) return;
+      this.axios.delete('/bookmarks/'+id, ).then(()=>{
+        this.$store.dispatch('removeBookmark', id);
+        this.$notify({type: 'success', title:'Bookmark removed successfully', text: 'Bookmark was removed successfully.', position: 'bottom center'});
+      }).catch(()=>{
+        this.$notify({type: 'error', title:'Something went wrong', text: 'Failed to remove the bookmark. Please try again later.', position: 'bottom center'});
+      })
+    },
   }
 }
 </script>

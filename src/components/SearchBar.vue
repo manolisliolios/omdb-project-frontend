@@ -14,7 +14,8 @@
     <div class="search-results">
       <div class="search-results-list">
         <div class="row">
-          <SearchResult v-for="movie in movies" :key="movie.imdbID" :item="movie" class="col-12 col-md-6 p-2"/>
+          <SearchResult v-for="movie in movies" :key="movie.imdbID" :item="movie"
+                        :bookmarks="bookmarks" :is-logged-in="isLoggedIn" class="col-12 col-md-6 p-2"/>
         </div>
 
       </div>
@@ -46,23 +47,36 @@
 import axios from "axios";
 import SearchResult from "./SearchResult";
 import Vue from "vue";
+import {mapState} from "vuex";
 
 export default{
 
+  computed:{
+    ...mapState({
+      bookmarks: state => state.bookmarks,
+      isLoggedIn: state => state.isLoggedIn
+    }),
+
+  },
   components: {SearchResult},
   watch:{
     ['params.search'](newVal){
       if(newVal.length === 0) this.clearResults();
       if(newVal.length < 3) return;
+      this.params.page = 1; // reset pagination when changin search
+      localStorage.setItem('search', newVal); // save state for next rendering
       this.fetchResults();
+    },
+    ['params.page'](newVal){
+      localStorage.setItem('page', newVal); // save state for next rendering
     }
   },
   data(){
     return{
       params:{
         category: 0,
-        search: '',
-        page: 1,
+        search: localStorage.getItem('search') || '',
+        page: localStorage.getItem('page') ? parseInt(localStorage.getItem('page')): 1,
         limit: 10,
         rows: 0
       },
@@ -72,6 +86,11 @@ export default{
         1: 'movie',
         2: 'series'
       }
+    }
+  },
+  mounted(){
+    if(this.params.search.length >0){
+      this.fetchResults();
     }
   },
 
@@ -109,6 +128,7 @@ export default{
       this.params.page = 1;
       this.params.rows = 0;
       this.movies = [];
+      localStorage.removeItem('search')
     },
 
     searchCategoryChanged(){

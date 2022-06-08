@@ -17,3 +17,14 @@
 input{
   border-radius:15px!important;
 }
+
+.btn-outline-white{
+  border:2px solid #fff;
+  background:transparent;
+  color:#fff;
+  padding:.5rem 2rem;
+  &:hover{
+    color:#fff;
+    opacity:0.8;
+  }
+}

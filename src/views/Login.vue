@@ -38,6 +38,16 @@ export default{
     login(){
       this.axios.post('/users/login', {email: this.email, password: this.password}).then(res=>{
 
+        this.$store.dispatch('login', {
+          user:{
+            fullName: res.data.fullName,
+            email: res.data.email,
+            id: res.data.id
+          },
+          token: res.data.token
+        }).then(()=>{
+          this.$router.push({name: 'home'});
+        });
         console.log(res);
       }).catch(()=>{
         this.$notify({type: 'error', title:'Something went wrong', text: 'The credentials you have entered are invalid or the account doesn\'t exist', position: 'bottom center'});

@@ -1,16 +1,16 @@
 import Vue from "vue"
 import VueRouter from "vue-router";
-import Home from "./views/Home";
+import HomeCmp from "./views/Home";
 import About from "./views/About";
 import Movie from "./views/Movie";
 import Login from "./views/Login";
 import Account from "./views/Account";
 import Register from "./views/Register";
-
+import Bookmarks from "./views/Bookmarks";
 Vue.use(VueRouter);
 
 const routes = [
-    {path: '/',name: 'home', component: Home},
+    {path: '/',name: 'home', component: HomeCmp},
     {path: '/movies/:movieId', name: 'movie', component: Movie},
     {path:'/about', name: 'about', component: About},
     {path: '/login', name: 'login', component: Login,
@@ -22,6 +22,10 @@ const routes = [
     {path: '/account', name: 'account', component: Account,
         meta: { requiresAuth: true }
     },
+    {path: '/bookmarks', name: 'bookmarks', component: Bookmarks,
+        meta: { requiresAuth: true }
+    },
+
 
 ];
 

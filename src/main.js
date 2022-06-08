@@ -11,7 +11,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import {faUser} from "@fortawesome/free-regular-svg-icons";
 import '@/assets/styles/globals/_boostrap.scss';
 import Notifications from 'vue-notification'
-
+import {setupAxiosInterceptors} from './store/interceptors';
 Vue.config.productionTip = false
 
 library.add(faUser);
@@ -22,6 +22,9 @@ Vue.use(BootstrapVue);
 const axiosInstance = axios.create({
   baseURL: process.env.VUE_APP_API_URL,
 });
+
+setupAxiosInterceptors(store, router, axiosInstance);
+
 Vue.use(Notifications)
 
 Vue.use(VueAxios, axiosInstance);

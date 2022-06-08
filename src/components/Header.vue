@@ -16,6 +16,11 @@
             Home
           </b-button>
 
+          <b-button v-if="isLoggedIn" variant="link" @click="redirectTo('bookmarks')">
+            Bookmarks
+          </b-button>
+
+
           <b-button v-if="!isLoggedIn"  variant="primary" @click="redirectTo('login')">
             Login / Register
           </b-button>

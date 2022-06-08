@@ -1,10 +1,7 @@
 <template>
   <div id="account">
 
-    <h2>Welcome, <span class="text-primary-gradient">{{user.fullName}}</span></h2>
-
-
-  <p>Want to logout?  <a href="#" @click.prevent="logout">Logout</a></p>
+    <h2>Your bookmarks, <span class="text-primary-gradient">{{user.fullName}}</span></h2>
     <div v-if="userObj" class="account-page">
 
       <div class="container">
@@ -42,21 +39,22 @@ export default{
     })
   },
   methods:{
-    logout(){
-      this.$store.dispatch("logout").then( () => {
-        this.$router.push({name: 'home'})
-      });
+    fetchBookmarks(){
+      this.axios.get('/bookmarks').then(res => {
+console.log(res);
+      }).catch(e=>{
+        console.log(e);
+      })
     }
   },
   data(){
     return{
-      userObj: null
+      bookmarks: null
     }
   },
   mounted(){
 
-    console.log(this.$route);
-    this.userObj = {...this.user};
+    this.fetchBookmarks();
   }
 }
 </script>

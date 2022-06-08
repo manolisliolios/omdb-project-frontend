@@ -7,7 +7,7 @@
       <div class="user-login-form mt-5">
         <b-form @submit.prevent="register">
 
-        </b-form>
+
         <b-form-input v-model="fullName" placeholder="Your name"/>
         <b-form-input v-model="email" placeholder="Your e-mail"/>
         <b-form-input v-model="password" type="password" placeholder="Your password"/>
@@ -17,6 +17,7 @@
           Already have an account? <router-link :to="{name:'login'}">Login here</router-link>
 
         </div>
+        </b-form>
       </div>
     </div>
 
@@ -45,10 +46,29 @@ export default{
         return;
       }
 
-      this.axios.post('/users/register', {email: this.email, password: this.password, fullName: this.fullName}).then(res=>{
-        console.log(res);
+      const body = {email: this.email, password: this.password, fullName: this.fullName}
+
+      this.axios.post('/users/register', body).then(res=>{
+        this.$notify({type: 'success', title:'Account created successfully', text: 'Your new account was created successfully.', position: 'bottom center'});
+
+        this.$store.dispatch('login', {
+          user:{
+            fullName: res.data.fullName,
+            email: res.data.email,
+            id: res.data.id
+          },
+          token: res.data.token
+        }).then(()=>{
+          this.$router.push({name: 'home'});
+        });
       }).catch(e=>{
         console.log(e);
+        if(e.response.status === 409){
+          this.$notify({type: 'error', title:'Account already exists', text: 'There is already one account using this e-mail.', position: 'bottom center'});
+        }else{
+          this.$notify({type: 'error', title:'Something went wrong', text: 'Please fill all the fields with their specifications.', position: 'bottom center'});
+        }
+
       })
 
     }

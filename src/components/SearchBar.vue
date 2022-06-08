@@ -1,6 +1,6 @@
 <template>
 
-  <div id="search-bar">
+  <div ref="search-bar" id="search-bar">
     <div class="type-selector mb-3">
       <b-form-radio-group v-model="params.category" @change="searchCategoryChanged">
         <b-form-radio value="0">All</b-form-radio>
@@ -13,18 +13,24 @@
 
     <div class="search-results">
       <div class="search-results-list">
-        <SearchResult v-for="movie in movies" :key="movie.imdbID" :item="movie"/>
+        <div class="row">
+          <SearchResult v-for="movie in movies" :key="movie.imdbID" :item="movie" class="col-12 col-md-6 p-2"/>
+        </div>
+
       </div>
 
       <div class="text-center">
         <b-pagination
+            pills
             v-if="params.rows > 10"
             v-model="params.page"
             :total-rows="params.rows"
             :per-page="params.limit"
+            :last-number="true"
+            align="center"
             aria-controls="my-table"
             class="mt-3"
-            @input="fetchResults"
+            @input="pageChanged"
         ></b-pagination>
       </div>
 
@@ -33,13 +39,13 @@
 </template>
 <style lang="scss">
 .search-results-list{
-  max-height:500px;
-  overflow-y:scroll;
+  margin-bottom:2rem;
 }
 </style>
 <script>
-
+import axios from "axios";
 import SearchResult from "./SearchResult";
+import Vue from "vue";
 
 export default{
 
@@ -76,12 +82,27 @@ export default{
         s: this.params.search,
         page: this.params.page
       }
+
       if(this.params.category > 0){
         params['type'] = this.types[this.params.category]
       }
-      this.axios.get('', {params}).then(res=>{
+
+      this.axios.get('/movies', {params}).then(res=>{
         this.movies = res.data.Search;
         this.params.rows = res.data.totalResults;
+
+        const extraRequests = [];
+
+        for(let movie of this.movies){
+          extraRequests.push(this.axios.get('/movies/' + movie.imdbID))
+        }
+
+        axios.all(extraRequests).then(axios.spread((...res)=>{
+          for(let [index,value] of Object.entries(res)){
+            // set with vue.set to get Reactivity and update child component!
+            Vue.set(this.movies[index], 'Plot', value.data.Plot);
+          }
+        }))
       });
     },
     clearResults(){
@@ -92,6 +113,10 @@ export default{
 
     searchCategoryChanged(){
       this.clearResults();
+      this.fetchResults();
+    },
+    pageChanged(){
+      this.$refs['search-bar'].scrollIntoView();
       this.fetchResults();
     }
   }

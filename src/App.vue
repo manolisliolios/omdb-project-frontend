@@ -1,15 +1,22 @@
 <template>
   <div id="app">
     <Header/>
-    <router-view></router-view>
+    <div class="router-view-area">
+      <router-view></router-view>
+    </div>
+
+    <Footer/>
+    <notifications position="bottom center"/>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 export default {
   name: 'App',
   components: {
+    Footer,
     Header
   }
 }
@@ -22,5 +29,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+
+  .router-view-area{
+    min-height:70vh;
+  }
 }
 </style>

@@ -6,13 +6,12 @@
       <div class="row">
 
         <div class="col-12">
-          <h5 v-if="isLoggedIn">Hey {{user.name}}</h5>
+<!--          <h5 v-if="isLoggedIn">Welcome back, <span class="text-primary-gradient">{{user.name}}</span></h5>-->
 
           <div class="search-container">
 
-            <h2>Find your next <span class="text-switcher"> {{phrases[currIndex]}}</span></h2>
+            <h2>Find your next <span class="text-primary-gradient"> {{phrases[currIndex]}}</span></h2>
             <SearchBar/>
-            <img src="@/assets/images/cinema.svg" width="300" class="my-4"/>
           </div>
 
         </div>
@@ -48,7 +47,7 @@ export default{
 
   data(){
     return{
-      phrases: ['Movie', 'Serie', 'Whatever'],
+      phrases: ['Movie', 'Series', 'Whatever'],
       selectedPhrase: 'Movie',
       currIndex: 0
     }

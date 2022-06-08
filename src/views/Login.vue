@@ -5,12 +5,16 @@
       <h2>Login</h2>
 
       <div class="user-login-form mt-5">
-        <b-form-input v-model="email" placeholder="Your e-mail"/>
-        <b-form-input v-model="password" type="password" placeholder="Your password"/>
+        <b-form @submit.prevent="login">
+          <b-form-input v-model="email" placeholder="Your e-mail"/>
+          <b-form-input v-model="password" type="password" placeholder="Your password"/>
 
-        <div class="mt-2">
-          <b-button variant="primary" class="btn-block" @click="login">Login</b-button>
-        </div>
+          <div class="mt-2">
+            <b-button type="submit" variant="primary" class="btn-block mb-3">Login</b-button>
+            Are you new to our website? <router-link :to="{name:'register'}">Register here</router-link>
+          </div>
+        </b-form>
+
       </div>
     </div>
 
@@ -32,12 +36,12 @@ export default{
 
   methods:{
     login(){
-      // login here
+      this.axios.post('/users/login', {email: this.email, password: this.password}).then(res=>{
 
-      this.$store.dispatch('login', {email: this.email}).then( () => {
-        this.$router.push({name: 'account'})
-      });
-
+        console.log(res);
+      }).catch(()=>{
+        this.$notify({type: 'error', title:'Something went wrong', text: 'The credentials you have entered are invalid or the account doesn\'t exist', position: 'bottom center'});
+      })
     }
   }
 }

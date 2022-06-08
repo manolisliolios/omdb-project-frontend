@@ -14,6 +14,7 @@
           <h2>{{movie.Title}}</h2>
           <p>{{movie.Plot}}</p>
 
+
           <p><strong>Duration:</strong> {{movie.Runtime}}</p>
           <p><strong>Actors:</strong> {{movie.Actors}}</p>
           <p><strong>Writer:</strong> {{movie.Writer}}</p>
@@ -43,9 +44,9 @@ export default{
 
   methods:{
     fetchMovie(){
-      this.axios.get('', {
+      this.axios.get('/movies/'+this.$route.params.movieId, {
         params:{
-          i: this.$route.params.movieId
+          plot: 'full'
         }
       }).then(res=>{
         this.movie = res.data;

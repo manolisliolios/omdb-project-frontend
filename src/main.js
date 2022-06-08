@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {faUser} from "@fortawesome/free-regular-svg-icons";
 import '@/assets/styles/globals/_boostrap.scss';
+import Notifications from 'vue-notification'
 
 Vue.config.productionTip = false
 
@@ -19,16 +20,9 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(BootstrapVue);
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_OMDB_URL,
+  baseURL: process.env.VUE_APP_API_URL,
 });
-
-axiosInstance.interceptors.request.use(config => {
-  config.params = {
-    apiKey: process.env.VUE_APP_OMDB_KEY,
-    ...config.params
-  }
-  return config;
-})
+Vue.use(Notifications)
 
 Vue.use(VueAxios, axiosInstance);
 

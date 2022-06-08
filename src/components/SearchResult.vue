@@ -93,6 +93,7 @@
   .__content {
     width: 100%;
     max-width:370px;
+    padding-top:0.5rem;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
@@ -111,6 +112,7 @@
       padding: 0 1em 1em;
     }
     h2{
+      font-size:1.5rem;
       opacity:0.8;
     }
     .desc{

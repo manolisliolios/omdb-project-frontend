@@ -18,6 +18,7 @@
 
         </div>
         </b-form>
+        <GoogleLogin/>
       </div>
     </div>
 
@@ -26,10 +27,10 @@
 </template>
 <script>
 
-
+import GoogleLogin from "../components/GoogleLogin";
 export default{
 
-
+  components:{GoogleLogin},
   data(){
     return{
       email: null,

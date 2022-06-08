@@ -1,7 +1,7 @@
 <template>
 
   <div id="movie">
-    <div class="container">
+    <div v-if="movie" class="container">
       <b-button variant="primary" @click="$router.push('/')">Go Back</b-button>
 
       <div class="row align-items-center justify-content-center">
@@ -19,6 +19,8 @@
           <p><strong>Actors:</strong> {{movie.Actors}}</p>
           <p><strong>Writer:</strong> {{movie.Writer}}</p>
           <p><strong>Director:</strong> {{movie.Director}}</p>
+
+          <b-button variant="primary" disabled>Rent now for 1.5$ <b-badge size="xs" variant="success">coming soon</b-badge></b-button>
         </div>
       </div>
     </div>

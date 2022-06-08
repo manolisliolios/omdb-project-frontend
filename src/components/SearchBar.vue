@@ -69,6 +69,9 @@ export default{
     },
     ['params.page'](newVal){
       localStorage.setItem('page', newVal); // save state for next rendering
+      this.$nextTick(()=>{
+        this.$refs['search-bar'].scrollIntoView();
+      })
     }
   },
   data(){
@@ -136,7 +139,6 @@ export default{
       this.fetchResults();
     },
     pageChanged(){
-      this.$refs['search-bar'].scrollIntoView();
       this.fetchResults();
     }
   }

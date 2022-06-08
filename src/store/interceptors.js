@@ -4,6 +4,8 @@ const setupAxiosInterceptors = (store, router, axiosInstance) => {
         const token = store.state.token;
         if(token){
             config.headers['x-access-token'] = token
+        }else{
+            delete config.headers['x-access-token'] // remove token from default headers if we are logged out or no token exists in state
         }
         return config;
     }, err => {

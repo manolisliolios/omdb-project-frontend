@@ -3,6 +3,9 @@
 @import '@/../node_modules/bootstrap/scss/bootstrap.scss';
 @import '@/../node_modules/bootstrap-vue/src/index.scss';
 
+*{
+  font-family: 'Montserrat', sans-serif;
+}
 .btn-primary{
   background:$default-gradient;
   border:0;

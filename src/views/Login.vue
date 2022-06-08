@@ -10,11 +10,13 @@
           <b-form-input v-model="password" type="password" placeholder="Your password"/>
 
           <div class="mt-2">
-            <b-button type="submit" variant="primary" class="btn-block mb-3">Login</b-button>
+            <b-button type="submit" variant="primary" block class=" mb-3">Login</b-button>
+
             Are you new to our website? <router-link :to="{name:'register'}">Register here</router-link>
           </div>
         </b-form>
 
+        <GoogleLogin/>
       </div>
     </div>
 
@@ -23,9 +25,9 @@
 </template>
 <script>
 
-
+import GoogleLogin from "../components/GoogleLogin";
 export default{
-
+  components: {GoogleLogin},
 
   data(){
     return{
@@ -35,24 +37,29 @@ export default{
   },
 
   methods:{
+
+    handleSuccessfullLogin(data){
+      this.$store.dispatch('login', {
+        user:{
+          fullName: data.fullName,
+          email: data.email,
+          id: data.id
+        },
+        token: data.token
+      }).then(()=>{
+        this.$router.push({name: 'home'});
+      });
+    },
     login(){
       this.axios.post('/users/login', {email: this.email, password: this.password}).then(res=>{
 
-        this.$store.dispatch('login', {
-          user:{
-            fullName: res.data.fullName,
-            email: res.data.email,
-            id: res.data.id
-          },
-          token: res.data.token
-        }).then(()=>{
-          this.$router.push({name: 'home'});
-        });
-        console.log(res);
+        this.handleSuccessfullLogin(res.data);
       }).catch(()=>{
         this.$notify({type: 'error', title:'Something went wrong', text: 'The credentials you have entered are invalid or the account doesn\'t exist', position: 'bottom center'});
       })
-    }
+    },
+
+
   }
 }
 </script>
@@ -69,6 +76,7 @@ export default{
       max-width:500px;
       margin:0 auto;
     }
+
   }
 }
 </style>

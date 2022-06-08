@@ -5,17 +5,10 @@ import router from "./router";
 import store from "./store";
 import axios from 'axios'
 import VueAxios from "vue-axios";
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core'
-import {faUser} from "@fortawesome/free-regular-svg-icons";
 import '@/assets/styles/globals/_boostrap.scss';
 import Notifications from 'vue-notification'
 import {setupAxiosInterceptors} from './store/interceptors';
 Vue.config.productionTip = false
-
-library.add(faUser);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(BootstrapVue);
 

@@ -108,6 +108,17 @@ export default{
   methods:{
     redirectToMovie(id){
       this.$router.push({name: 'movie', params: {movieId: id}});
+    },
+
+    addBookmark(id){
+      this.axios.post('/bookmarks', {
+        movieId: id
+      }).then(res=>{
+
+        console.log(res.data);
+      }).catch(()=>{
+        this.$notify({type: 'error', title:'Something went wrong', text: 'Failed to add the bookmark. Please try again later.', position: 'bottom center'});
+      })
     }
   }
 }

@@ -46,7 +46,7 @@ export default{
   $key-width: calc(#{$calculator-width} / 4 - 3px);
   $key-height: calc(#{$calculator-height} / 7);
 
-  .container{
+  &.container{
     max-width:1200px;
     margin:0 auto;
     text-align:center;
